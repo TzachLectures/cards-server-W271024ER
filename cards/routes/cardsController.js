@@ -1,4 +1,5 @@
 import express from "express";
+import Card from "../models/Card.js";
 
 const router = express.Router();
 
@@ -12,9 +13,12 @@ router.get("/", (req, res) => {
   res.send(cards);
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
   const newCard = req.body;
-  cards.push(newCard);
+
+  const newCardForMongo = new Card(newCard);
+  await newCardForMongo.save();
+
   res.status(201).send("New card added successfully");
 });
 
