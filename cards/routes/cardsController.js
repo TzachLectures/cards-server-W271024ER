@@ -1,5 +1,6 @@
 import express from "express";
 import Card from "../models/Card.js";
+import { createNewCard } from "../services/cardsService.js";
 
 const router = express.Router();
 
@@ -9,22 +10,24 @@ let cards = [
   { id: 3, title: "card3", subtitle: "sub card3" },
 ];
 
-router.get("/", (req, res) => {
-  res.send(cards);
+router.get("/", async (req, res) => {
+  const cardFromDb = await Card.find();
+  res.send(cardFromDb);
 });
 
 router.post("/", async (req, res) => {
   const newCard = req.body;
-
-  const newCardForMongo = new Card(newCard);
-  await newCardForMongo.save();
-
-  res.status(201).send("New card added successfully");
+  const cardResult = await createNewCard(newCard);
+  if (cardResult) {
+    res.status(201).send("New card added successfully");
+  } else {
+    res.status(400).send("something went wrong with card creation");
+  }
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const card = cards.find((c) => c.id.toString() === id);
+  const card = await Card.findById(id);
   if (card) {
     res.send(card);
   } else {
