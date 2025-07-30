@@ -1,5 +1,4 @@
 import express from "express";
-import Card from "../models/Card.js";
 import {
   createNewCard,
   deleteCard,

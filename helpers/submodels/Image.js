@@ -3,5 +3,5 @@ import { DEFAULT_VALIDATION, URL } from "../mongooseValidators.js";
 
 export const Image = new Schema({
   url: URL,
-  alt: DEFAULT_VALIDATION,
+  alt: { ...DEFAULT_VALIDATION, required: false, minLength: 0 },
 });
