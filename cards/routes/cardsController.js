@@ -1,6 +1,11 @@
 import express from "express";
 import Card from "../models/Card.js";
-import { createNewCard } from "../services/cardsService.js";
+import {
+  createNewCard,
+  deleteCard,
+  getAllCards,
+  updateCard,
+} from "../services/cardsService.js";
 
 const router = express.Router();
 
@@ -11,8 +16,12 @@ let cards = [
 ];
 
 router.get("/", async (req, res) => {
-  const cardFromDb = await Card.find();
-  res.send(cardFromDb);
+  const allCards = await getAllCards();
+  if (allCards) {
+    res.send(allCards);
+  } else {
+    res.status(500).send("something went wrong with get all cards");
+  }
 });
 
 router.post("/", async (req, res) => {
@@ -27,7 +36,7 @@ router.post("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const card = await Card.findById(id);
+  const card = await getCardById(id);
   if (card) {
     res.send(card);
   } else {
@@ -35,23 +44,25 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", async (req, res) => {
   const { id } = req.params;
-  cards = cards.filter((card) => card.id.toString() !== id);
-  res.send(cards);
+  const idOfDeletedCard = await deleteCard(id);
+  if (idOfDeletedCard) {
+    res.send("Card deleted successfully");
+  } else {
+    res.status(400).send("something went wrong with card delete");
+  }
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const newCard = req.body;
-  const cardToReplaceIndex = cards.findIndex(
-    (card) => card.id.toString() === id
-  );
-  if (cardToReplaceIndex !== -1) {
-    cards[cardToReplaceIndex] = newCard;
+  const modifiedCard = await updateCard(id, newCard);
+  if (modifiedCard) {
+    res.send(modifiedCard);
+  } else {
+    res.status(400).send("something went wrong with card edit");
   }
-
-  res.send(cards);
 });
 
 export default router;
