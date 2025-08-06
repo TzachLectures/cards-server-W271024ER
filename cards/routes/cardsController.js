@@ -5,14 +5,9 @@ import {
   getAllCards,
   updateCard,
 } from "../services/cardsService.js";
+import { auth } from "../../auth/services/authService.js";
 
 const router = express.Router();
-
-let cards = [
-  { id: 1, title: "card1", subtitle: "sub card1" },
-  { id: 2, title: "card2", subtitle: "sub card2" },
-  { id: 3, title: "card3", subtitle: "sub card3" },
-];
 
 router.get("/", async (req, res) => {
   const allCards = await getAllCards();
@@ -23,7 +18,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const newCard = req.body;
   const cardResult = await createNewCard(newCard);
   if (cardResult) {

@@ -12,9 +12,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
     trim: true,
-    match: RegExp(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&])[A-Za-z\d!@#$%^&]{9,}$/
-    ),
   },
   image: Image,
   address: Address,
