@@ -19,11 +19,11 @@ export const getCardById = async (id) => {
 };
 
 //create
-export const createNewCard = async (card) => {
+export const createNewCard = async (card, userId) => {
   //generate biznumber for the card
   //it will look like this:
   //card.bizNumber = generateBizNumber()
-
+  card.user_id = userId;
   const newCard = await createCard(card);
   return newCard;
 };

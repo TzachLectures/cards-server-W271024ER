@@ -9,5 +9,7 @@ export const auth = (req, res, next) => {
   if (!userInfo) {
     return res.status(401).send("Authentication Error: Unauthorize user");
   }
+
+  req.user = userInfo;
   next();
 };
