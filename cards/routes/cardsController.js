@@ -3,6 +3,7 @@ import {
   createNewCard,
   deleteCard,
   getAllCards,
+  getCardById,
   updateCard,
 } from "../services/cardsService.js";
 import { auth } from "../../auth/services/authService.js";
