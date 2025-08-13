@@ -3,6 +3,7 @@ import logger from "./middlewares/logger.js";
 import router from "./router/router.js";
 import cors from "cors";
 import { connectToDb } from "./DB/dbService.js";
+import chalk from "chalk";
 const app = express(); //איתחול אפליקציית אקספרס חדשה
 const port = 3000;
 
@@ -14,6 +15,8 @@ app.use(
 
 app.use(express.json());
 app.use(logger);
+
+app.use(express.static("./public"));
 app.use(router);
 
 app.get("/ping", (req, res) => {
@@ -21,6 +24,6 @@ app.get("/ping", (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log("server is listening to port " + port);
+  console.log(chalk.blueBright(`Listening on: http://localhost:${port}`));
   connectToDb();
 });
