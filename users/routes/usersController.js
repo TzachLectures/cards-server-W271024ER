@@ -4,12 +4,12 @@ import { createNewUser, login } from "../services/usersService.js";
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  const newUser = req.body;
-  const user = await createNewUser(newUser);
-  if (user) {
+  try {
+    const newUser = req.body;
+    const user = await createNewUser(newUser);
     res.status(201).send(user);
-  } else {
-    res.status(400).send("somehing went wrong with registration");
+  } catch (error) {
+    res.status(400).send(error.message);
   }
 });
 

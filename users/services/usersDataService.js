@@ -29,8 +29,29 @@ export const createUser = async (user) => {
     await userForDb.save();
     return userForDb;
   } catch (error) {
-    console.log(error);
-    return null;
+    console.error("Mongo error:", error);
+
+    // אימייל תפוס (duplicate key error)
+    if (error.code === 11000 && error.keyPattern?.email) {
+      throw new Error("Email already exists");
+    }
+
+    // תקינות נתונים (שגיאות ולידציה של Mongoose)
+    if (error.name === "ValidationError") {
+      const messages = Object.values(error.errors).map((e) => e.message);
+      throw new Error(`Validation failed: ${messages.join(", ")}`);
+    }
+
+    // שגיאות תקשורת (MongoNetworkError למשל)
+    if (
+      error.name === "MongoNetworkError" ||
+      error.message.includes("ECONNREFUSED")
+    ) {
+      throw new Error("Database connection error");
+    }
+
+    // שגיאה כללית שלא סווגה
+    throw new Error("MongoDb - Error in creating new user");
   }
 };
 

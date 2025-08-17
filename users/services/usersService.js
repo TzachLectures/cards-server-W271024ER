@@ -4,14 +4,15 @@ import { comparePassword, generatePassword } from "../helpers/bcrypt.js";
 import { createUser, getUserByEmail } from "./usersDataService.js";
 
 export const createNewUser = async (user) => {
-  let hashPass = generatePassword(user.password);
-  user.password = hashPass;
-  const newUser = await createUser(user);
-  if (!newUser) {
-    return null;
+  try {
+    let hashPass = generatePassword(user.password);
+    user.password = hashPass;
+    const newUser = await createUser(user);
+    const DTOuser = _.pick(newUser, ["email", "name", "_id"]);
+    return DTOuser;
+  } catch (error) {
+    throw new Error(error.message);
   }
-  const DTOuser = _.pick(newUser, ["email", "name", "_id"]);
-  return DTOuser;
 };
 
 export const login = async (email, password) => {
