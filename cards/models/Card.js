@@ -26,6 +26,7 @@ const cardSchema = new Schema({
     maxLength: 7,
     required: true,
     trim: true,
+    unique: true,
   },
   likes: [String],
   createdAt: {

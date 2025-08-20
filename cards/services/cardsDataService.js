@@ -57,3 +57,14 @@ export const deleteCardInDb = async (id) => {
     return null;
   }
 };
+
+//get card by biz number
+export const getCardByBizNumber = async (bizNumber) => {
+  try {
+    const card = await Card.findOne({ bizNumber });
+    return card;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};

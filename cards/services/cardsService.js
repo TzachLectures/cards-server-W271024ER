@@ -1,3 +1,4 @@
+import { generateBizNumber } from "../helpers/generateBizNumber.js";
 import { validateCard } from "../validation/cardValidationService.js";
 import {
   createCard,
@@ -23,7 +24,7 @@ export const getCardById = async (id) => {
 export const createNewCard = async (card, userId) => {
   //generate biznumber for the card
   //it will look like this:
-  //card.bizNumber = generateBizNumber()
+  card.bizNumber = generateBizNumber();
   card.user_id = userId;
   const { error } = validateCard(card);
   if (error) {
