@@ -16,9 +16,13 @@ export const createNewUser = async (user) => {
 };
 
 export const login = async (email, password) => {
-  const user = await getUserByEmail(email);
-  if (comparePassword(password, user?.password)) {
-    return generateToken(user);
+  try {
+    const user = await getUserByEmail(email);
+    if (comparePassword(password, user?.password)) {
+      return generateToken(user);
+    }
+    throw new Error("password incorrect");
+  } catch (error) {
+    throw new Error(error.message);
   }
-  return null;
 };
