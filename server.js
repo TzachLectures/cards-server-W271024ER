@@ -1,11 +1,16 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import logger from "./middlewares/logger.js";
 import router from "./router/router.js";
 import cors from "cors";
 import { connectToDb } from "./DB/dbService.js";
 import chalk from "chalk";
+
+import serverLogger from "./middlewares/loggerService.js";
 const app = express(); //איתחול אפליקציית אקספרס חדשה
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(
   cors({
@@ -14,7 +19,7 @@ app.use(
 );
 
 app.use(express.json());
-app.use(logger);
+app.use(serverLogger);
 
 app.use(express.static("./public"));
 app.get("/ping", (req, res) => {
